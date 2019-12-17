@@ -1,5 +1,7 @@
 package com.kotlintest.reified
 
+import com.google.gson.Gson
+
 inline fun  <K, reified T> HashMap<K, T>.plusOrDefault(key: K, plus: T, defaultValue: T){
     if(!containsKey(key)){
         put(key, defaultValue)
@@ -49,6 +51,7 @@ inline fun  <K, T> HashMap<K, T>.plusOrDefault2(key: K, plus: T, defaultValue: T
 }
 
 class Michael{
+    var hitMichaelCount: Int=0
     init {
         println("init michael")
     }
@@ -57,16 +60,21 @@ class Michael{
 /**
  * 這樣寫不行
  */
-fun <T> createMichael(): T{
+fun <T> createMichael(): T?{
     return T::class.java.newInstance()
+    //return null
 }
 
 inline fun <reified T> createMichaelEx(): T{
     return T::class.java.newInstance()
 }
 
-inline fun <reified T> toObject(json: String, clz: T): T{
+inline fun <reified T> toObject(json: String): T{
+    return Gson().fromJson(json, T::class.java)
+}
 
+inline fun <reified T> toJson(json: T): String{
+    return Gson().toJson(json, T::class.java)
 }
 
 
@@ -75,5 +83,10 @@ fun main(args: Array<String>) {
     val m = HashMap<Int, Int>()
     m.plusOrDefault(9, 2, 1)
     println()
-    createMichaelEx<Michael>()
+    val michael = createMichaelEx<Michael>()
+    michael.hitMichaelCount = 999
+    val json = toJson<Michael>(michael)
+    println("toJson $json")
+    val michaelClone = toObject<Michael>(json)
+    println("toObject $michaelClone")
 }
