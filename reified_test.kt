@@ -32,16 +32,16 @@ inline fun  <K, T> HashMap<K, T>.plusOrDefault2(key: K, plus: T, defaultValue: T
     var val2: T?=null
     when(get(key)){
         is Int -> {
-            val2 = ((value as? Int)?.plus(plus as Int) ?: put(key, defaultValue)) as T
+            val2 = ((value as? Int)?.plus(plus as Int) ?: put(key, defaultValue)) as T  //這樣寫會有warning...
         }
         is Long -> {
-            val2 = ((value as? Long)?.plus(plus as Long) ?: put(key, defaultValue)) as T
+            val2 = ((value as? Long)?.plus(plus as Long) ?: put(key, defaultValue)) as T  //這樣寫會有warning..
         }
         is Float -> {
-            val2 = ((value as? Float)?.plus(plus as Float) ?: put(key, defaultValue)) as T
+            val2 = ((value as? Float)?.plus(plus as Float) ?: put(key, defaultValue)) as T  //這樣寫會有warning..
         }
         is Double -> {
-            val2 = ((value as? Double)?.plus(plus as Double) ?: put(key, defaultValue)) as T
+            val2 = ((value as? Double)?.plus(plus as Double) ?: put(key, defaultValue)) as T  //這樣寫會有warning..
         }
     }
     val2?.let {it-> this.put(key, it) }
@@ -54,10 +54,9 @@ class Michael{
     }
 }
 
-class Michael1{
-
-}
-
+/**
+ * 這樣寫不行
+ */
 fun <T> createMichael(): T{
     return T::class.java.newInstance()
 }
